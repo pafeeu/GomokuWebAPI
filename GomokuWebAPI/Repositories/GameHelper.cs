@@ -54,7 +54,7 @@ namespace GomokuWebAPI.Repositories
                     short counter;
                     for (counter = 1; counter <= 4; counter++)
                     {
-                        coords = GetNextCoords(coords, dir);
+                        GetNextCoords(ref coords, dir);
                         var nextMove = moves.Where(m => m.X == coords.x && m.Y == coords.y).FirstOrDefault();
                         if (nextMove is null || nextMove.PlayerId != move.PlayerId)
                             break;
@@ -64,20 +64,6 @@ namespace GomokuWebAPI.Repositories
                 }
             }
             return null;
-
-
-            //not ended parse to short table 19x19
-            //var players = game.Players.Select(x => x.PlayerId);
-            //if (players.Count() != 2)
-            //    return false;
-            //long p1 = players[0], p2 = players[1];
-
-            //short[][] board = new short[19][];
-            //for (int y = 0; y < 19; y++)
-            //{
-            //    var lineX = moves.Where(x => x.Y == y).ToArray();
-            //}
-
         }
         private enum Direction { RightUp, Right, RightDown, Down }
         private struct Coords { 
@@ -89,20 +75,27 @@ namespace GomokuWebAPI.Repositories
             public short x; 
             public short y; 
         }
-        private Coords GetNextCoords(Coords start, Direction direction)
+        private void GetNextCoords(ref Coords start, Direction direction)
         {
             switch (direction)
             {
                 case Direction.RightUp:
-                    return new Coords(start.x++, start.y++);
+                    start.x++; 
+                    start.y++;
+                    break;
                 case Direction.Right:
-                    return new Coords(start.x++, start.y);
+                    start.x++; 
+                    //start.y;
+                    break;
                 case Direction.RightDown:
-                    return new Coords(start.x++, start.y--);
+                    start.x++; 
+                    start.y--;
+                    break;
                 case Direction.Down:
-                    return new Coords(start.x, start.y++);
-                default:
-                    return new Coords();
+                    //start.x; 
+                    start.y--;
+                    break;
+                default:break;
             }
         }
     }
